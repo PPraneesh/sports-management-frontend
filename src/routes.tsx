@@ -26,6 +26,8 @@ import TournamentDetailsPage from './pages/tournament/TournamentDetailsPage';
 // Team Management Pages
 import TeamDetailsPage from './pages/team/TeamDetailsPage';
 import TeamMembersPage from './pages/team/TeamMembersPage';
+import MyTeamsPage from './pages/team/MyTeamsPage';
+import MyTeamManagePage from './pages/team/MyTeamManagePage';
 
 // Match Management Pages
 import MatchDetailsPage from './pages/match/MatchDetailsPage';
@@ -155,6 +157,14 @@ export const router = createBrowserRouter([
           {
             path: '/teams/:teamId/members',
             element: <TeamMembersPage />,
+          },
+          {
+            path: '/my-teams',
+            element: <MyTeamsPage />,
+          },
+          {
+            path: '/my-teams/:teamId',
+            element: <MyTeamManagePage />,
           },
           {
             path: '/matches/:matchId',

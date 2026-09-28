@@ -52,7 +52,7 @@ export default function TeamMembersPage() {
   const [members, setMembers] =
     useState<TeamMemberResponse[]>([]);
 
-  const [userId, setUserId] =
+  const [email, setEmail] =
     useState('');
 
   const [loading, setLoading] = useState(true);
@@ -107,11 +107,8 @@ export default function TeamMembersPage() {
   ) => {
     event.preventDefault();
 
-    const numericUserId =
-      Number(userId);
-
-    if (!numericUserId) {
-      setAddError('Enter a valid user ID.');
+    if (!email.trim()) {
+      setAddError('Enter a valid email address.');
       return;
     }
 
@@ -123,7 +120,7 @@ export default function TeamMembersPage() {
         await addTeamMember(
           id,
           {
-            userId: numericUserId,
+            email: email.trim(),
           }
         );
 
@@ -132,7 +129,7 @@ export default function TeamMembersPage() {
         member,
       ]);
 
-      setUserId('');
+      setEmail('');
 
     } catch (error) {
       setAddError(
@@ -238,7 +235,7 @@ export default function TeamMembersPage() {
             </h2>
 
             <p className="mt-1 text-sm text-gray-500">
-              Enter the user ID of the player you want to add.
+              Enter the email address of the player you want to add.
             </p>
 
 
@@ -255,15 +252,14 @@ export default function TeamMembersPage() {
             >
 
               <input
-                type="number"
-                min={1}
-                value={userId}
+                type="email"
+                value={email}
                 onChange={(event) =>
-                  setUserId(
+                  setEmail(
                     event.target.value
                   )
                 }
-                placeholder="User ID"
+                placeholder="player@example.com"
                 required
                 className="min-w-0 flex-1 rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-gray-900"
               />
