@@ -32,10 +32,6 @@ import MyTeamManagePage from './pages/team/MyTeamManagePage';
 import MatchDetailsPage from './pages/match/MatchDetailsPage';
 import MatchManagementPage from './pages/match/MatchManagementPage';
 
-// Invitation Pages
-import InvitationsPage from './pages/invitation/InvitationsPage';
-import InvitationTokenPage from './pages/invitation/InvitationTokenPage';
-
 // Redirect /t/:slug -> /public/tournaments/:slug
 function PublicTournamentSlugRedirect() {
   const { slug } = useParams();
@@ -116,10 +112,6 @@ export const router = createBrowserRouter([
         path: '/browse',
         element: <Navigate to="/tournaments/public" replace />,
       },
-      {
-        path: '/invitations/:token',
-        element: <InvitationTokenPage />,
-      },
 
       // Authenticated Protected Organizer & Team area
       {
@@ -172,11 +164,7 @@ export const router = createBrowserRouter([
           {
             path: '/matches/:matchId/manage',
             element: <MatchManagementPage />,
-          },
-          {
-            path: '/invitations',
-            element: <InvitationsPage />,
-          },
+          }
         ],
       },
     ],

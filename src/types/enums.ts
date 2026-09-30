@@ -37,17 +37,6 @@ export type TournamentEventType =
   (typeof TournamentEventType)[keyof typeof TournamentEventType];
 
 
-export const InvitationStatus = {
-  PENDING: 'PENDING',
-  ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED',
-  EXPIRED: 'EXPIRED',
-} as const;
-
-export type InvitationStatus =
-  (typeof InvitationStatus)[keyof typeof InvitationStatus];
-
-
 export const TeamMemberRole = {
   CAPTAIN: 'CAPTAIN',
   PLAYER: 'PLAYER',
