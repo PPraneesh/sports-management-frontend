@@ -25,7 +25,7 @@ export default function TournamentCard({
   const targetHref =
     linkTo ??
     (isPublic
-      ? `/t/${tournament.publicSlug}`
+      ? `/public/tournaments/${tournament.publicSlug}`
       : `/tournaments/${tournament.id}`);
 
   const isOpenForRegistration =

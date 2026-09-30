@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router';
+  import { Link, Outlet } from 'react-router';
 import { useAppSelector } from '../../app/hooks';
 
 export default function PublicLayout() {

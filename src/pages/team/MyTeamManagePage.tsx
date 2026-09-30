@@ -390,7 +390,7 @@ export default function MyTeamManagePage() {
       <ConfirmationModal
         isOpen={!!removingMember}
         title="Remove Team Member"
-        message={`Are you sure you want to remove this member from ${team.name}?`}
+        message={`Are you sure you want to remove ${removingMember?.name ?? 'this member'} from ${team.name}?`}
         confirmText="Remove"
         isDanger
         loading={removing}
@@ -433,35 +433,61 @@ interface MemberRowProps {
 function MemberRow({ member, showRemove, onRemove }: MemberRowProps) {
   const isCapt = member.memberRole === 'CAPTAIN';
 
+  const initials = member.name
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
   return (
     <div className="flex flex-col justify-between gap-4 px-6 py-5 sm:flex-row sm:items-center">
 
-      <div>
-        <div className="flex flex-wrap items-center gap-3">
+      <div className="flex items-center gap-4">
 
-          <p className="font-semibold text-gray-900">
-            {isCapt ? '👑 Captain' : `Player`}
-          </p>
-
-          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
-            {member.memberRole}
-          </span>
-
-          {member.active ? (
-            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-              Active
-            </span>
-          ) : (
-            <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-500">
-              Inactive
-            </span>
-          )}
-
+        {/* Avatar */}
+        <div
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
+            isCapt
+              ? 'bg-amber-100 text-amber-700'
+              : 'bg-indigo-100 text-indigo-700'
+          }`}
+        >
+          {initials}
         </div>
 
-        <p className="mt-1 text-xs text-gray-400">
-          Joined {formatDateTime(member.joinedAt)}
-        </p>
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="font-semibold text-gray-900">{member.name}</p>
+
+            {isCapt ? (
+              <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+                👑 Captain
+              </span>
+            ) : (
+              <span className="rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">
+                Player
+              </span>
+            )}
+
+            {member.active ? (
+              <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700">
+                Active
+              </span>
+            ) : (
+              <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-500">
+                Inactive
+              </span>
+            )}
+          </div>
+
+          <p className="mt-0.5 text-xs text-gray-400">{member.email}</p>
+
+          <p className="mt-0.5 text-xs text-gray-400">
+            Joined {formatDateTime(member.joinedAt)}
+          </p>
+        </div>
+
       </div>
 
 

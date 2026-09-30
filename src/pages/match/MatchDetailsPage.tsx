@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Navigate, useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { getMatchById } from '../../api/match.api';
 import { getTournamentTeams } from '../../api/team.api';
 import type { MatchResponse } from '../../types/match.types';

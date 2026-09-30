@@ -13,7 +13,7 @@ export default function TournamentOverviewTab({
 }: TournamentOverviewTabProps) {
   const [copied, setCopied] = useState(false);
 
-  const publicUrl = `${window.location.origin}/t/${tournament.publicSlug}`;
+  const publicUrl = `${window.location.origin}/public/tournaments/${tournament.publicSlug}`;
 
   const handleCopyLink = async () => {
     try {

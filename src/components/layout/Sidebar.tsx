@@ -56,7 +56,10 @@ export default function Sidebar({ mobile = false, onNavigate }: SidebarProps) {
           to="/tournaments/public"
           onClick={onNavigate}
           className={linkClass(
-            isActive('/tournaments/public') || isActive('/t/')
+            isActive('/tournaments/public') ||
+            isActive('/public/tournaments') ||
+            isActive('/public/tournament') ||
+            isActive('/t/')
           )}
         >
           <svg className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">

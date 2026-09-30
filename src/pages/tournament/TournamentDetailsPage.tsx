@@ -19,7 +19,6 @@ import { getApiErrorMessage } from '../../utils/apiError';
 import TournamentOverviewTab from './tabs/TournamentOverviewTab';
 import TournamentTeamsTab from './tabs/TournamentTeamsTab';
 import TournamentMatchesTab from './tabs/TournamentMatchesTab';
-import TournamentMyTeamTab from './tabs/TournamentMyTeamTab';
 import TournamentEditTab from './tabs/TournamentEditTab';
 
 // ─── Confirmation Dialog ─────────────────────────────────────────────────────

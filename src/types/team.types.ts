@@ -55,7 +55,8 @@ export interface TeamResponse {
 export interface TeamMemberResponse {
   id: number;
   teamId: number;
-  userId: number;
+  name: string;
+  email: string;
   memberRole: TeamMemberRole;
   active: boolean;
   joinedAt: string;

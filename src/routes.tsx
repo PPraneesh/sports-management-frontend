@@ -16,7 +16,6 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 // Public Pages
 import PublicTournamentsPage from './pages/public/PublicTournamentsPage';
 import PublicTournamentPage from './pages/public/PublicTournamentPage';
-import PublicMatchPage from './pages/public/PublicMatchPage';
 
 // Tournament Management Pages
 import MyTournamentsPage from './pages/tournament/MyTournamentsPage';
@@ -37,10 +36,10 @@ import MatchManagementPage from './pages/match/MatchManagementPage';
 import InvitationsPage from './pages/invitation/InvitationsPage';
 import InvitationTokenPage from './pages/invitation/InvitationTokenPage';
 
-// Helper component for backward compatibility redirects to the single route with tabs
-function TournamentTabRedirect({ tab }: { tab: string }) {
-  const { tournamentId } = useParams();
-  return <Navigate to={`/tournaments/${tournamentId}?tab=${tab}`} replace />;
+// Redirect /t/:slug -> /public/tournaments/:slug
+function PublicTournamentSlugRedirect() {
+  const { slug } = useParams();
+  return <Navigate to={`/public/tournaments/${slug}`} replace />;
 }
 
 // Smart root redirect based on auth status
@@ -79,26 +78,43 @@ export const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
-      // Public Tournament & Match browsing (accessible with or without login, with conditional rendering)
+      // Public Tournament browsing (accessible with or without login)
       {
         path: '/tournaments/public',
         element: <PublicTournamentsPage />,
       },
       {
+        // Canonical single-route public tournament experience
+        path: '/public/tournaments/:slug',
+        element: <PublicTournamentPage />,
+      },
+      {
+        path: '/public/tournaments',
+        element: <PublicTournamentPage />,
+      },
+      {
+        // Singular alias: /public/tournament/:slug -> /public/tournaments/:slug
+        path: '/public/tournament/:slug',
+        element: <PublicTournamentSlugRedirect />,
+      },
+      {
+        // Legacy: /t/:slug -> /public/tournaments/:slug
+        path: '/t/:slug',
+        element: <PublicTournamentSlugRedirect />,
+      },
+      {
+        // Legacy: /tournaments/public/:slug -> /public/tournaments/:slug
+        path: '/tournaments/public/:slug',
+        element: <PublicTournamentSlugRedirect />,
+      },
+      {
+        // Legacy match page: redirect to public tournament page (modal handles inline)
+        path: '/t/:slug/matches/:matchCode',
+        element: <PublicTournamentSlugRedirect />,
+      },
+      {
         path: '/browse',
         element: <Navigate to="/tournaments/public" replace />,
-      },
-      {
-        path: '/t/:slug',
-        element: <PublicTournamentPage />,
-      },
-      {
-        path: '/tournaments/public/:slug',
-        element: <PublicTournamentPage />,
-      },
-      {
-        path: '/t/:slug/matches/:matchCode',
-        element: <PublicMatchPage />,
       },
       {
         path: '/invitations/:token',
@@ -128,23 +144,6 @@ export const router = createBrowserRouter([
           {
             path: '/tournaments/:tournamentId',
             element: <TournamentDetailsPage />,
-          },
-          // Legacy route redirects to the single route with tabs
-          {
-            path: '/tournaments/:tournamentId/edit',
-            element: <TournamentTabRedirect tab="edit" />,
-          },
-          {
-            path: '/tournaments/:tournamentId/teams',
-            element: <TournamentTabRedirect tab="teams" />,
-          },
-          {
-            path: '/tournaments/:tournamentId/matches',
-            element: <TournamentTabRedirect tab="matches" />,
-          },
-          {
-            path: '/tournaments/:tournamentId/team',
-            element: <TournamentTabRedirect tab="my-team" />,
           },
           {
             path: '/tournaments/:tournamentId/matches/:matchId',
