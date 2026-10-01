@@ -20,7 +20,7 @@ export default function LoginPage() {
     dispatch(clearAuthError());
   }, [dispatch]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setLocalError('');
 
@@ -29,13 +29,12 @@ export default function LoginPage() {
       return;
     }
 
-    try {
-      await dispatch(login({ email: email.trim(), password })).unwrap();
-      const origin = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/dashboard';
-      navigate(origin, { replace: true });
-    } catch {
-      // Error is handled in redux slice
-    }
+    dispatch(login({ email: email.trim(), password }))
+      .unwrap()
+      .then(() => {
+        const origin = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/dashboard';
+        navigate(origin, { replace: true });
+      })
   };
 
   const activeError = localError || error;

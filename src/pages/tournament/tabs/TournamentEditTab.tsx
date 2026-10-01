@@ -62,7 +62,18 @@ export default function TournamentEditTab({
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Keep form in sync if tournament prop changes
+  // ── Status-based permission flags ───────────────────────────────────────────
+  const status = tournament.status;
+  const isDraft = status === 'DRAFT';
+  const isOpen = status === 'OPEN';
+  // Everything after registration closes: block all editing
+  const isFullyLocked = status !== 'DRAFT' && status !== 'OPEN';
+
+  // When OPEN, registrationEnd can only be pushed forward (extend-only)
+  const registrationEndMin = isOpen
+    ? toDateTimeLocalInput(tournament.registrationEnd)
+    : form.registrationStart || todayMin;
+
   useEffect(() => {
     setForm({
       name: tournament.name,
@@ -136,8 +147,40 @@ export default function TournamentEditTab({
     }
   };
 
+  // ── Fully locked state ───────────────────────────────────────────────────
+  if (isFullyLocked) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-start gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-5 shadow-xs">
+          <span className="mt-0.5 text-xl">🔒</span>
+          <div>
+            <p className="font-semibold text-amber-900">Editing is no longer available</p>
+            <p className="mt-1 text-sm text-amber-700">
+              Tournament details cannot be changed after registration has closed.
+              Current status:{' '}
+              <span className="font-bold">{status.replace(/_/g, ' ')}</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      {/* OPEN-state info banner */}
+      {isOpen && (
+        <div className="flex items-start gap-4 rounded-2xl border border-blue-200 bg-blue-50 p-5 shadow-xs">
+          <span className="mt-0.5 text-xl">ℹ️</span>
+          <div>
+            <p className="font-semibold text-blue-900">Limited editing — tournament is Open</p>
+            <p className="mt-1 text-sm text-blue-700">
+              Registration start, tournament dates, and maximum teams are locked.
+              You may only extend the registration deadline and update other details.
+            </p>
+          </div>
+        </div>
+      )}
       {error && <ErrorAlert message={error} onClose={() => setError('')} />}
 
       {success && (
@@ -156,7 +199,6 @@ export default function TournamentEditTab({
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic Information */}
         <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xs">
           <h2 className="text-lg font-semibold text-gray-900">
             Basic Information
@@ -221,21 +263,21 @@ export default function TournamentEditTab({
           </div>
         </section>
 
-        {/* Tournament Rules */}
         <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xs">
           <h2 className="text-lg font-semibold text-gray-900">
             Tournament Rules & Standings
           </h2>
 
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <Field label="Maximum Teams" required>
+            <Field label="Maximum Teams" required locked={isOpen} lockNote={isOpen ? 'Locked once open' : undefined}>
               <input
                 type="number"
                 min={4}
                 value={form.maximumTeams}
                 onChange={(e) => updateField('maximumTeams', e.target.value)}
                 required
-                className={inputClass}
+                disabled={isOpen}
+                className={isOpen ? inputClassLocked : inputClass}
               />
             </Field>
 
@@ -271,28 +313,28 @@ export default function TournamentEditTab({
           </div>
         </section>
 
-        {/* Registration Schedule */}
         <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xs">
           <h2 className="text-lg font-semibold text-gray-900">
             Registration Schedule
           </h2>
 
           <div className="mt-6 grid gap-5 md:grid-cols-2">
-            <Field label="Registration Opens" required>
+            <Field label="Registration Opens" required locked={isOpen} lockNote={isOpen ? 'Locked once open' : undefined}>
               <input
                 type="datetime-local"
-                min={todayMin}
+                min={isDraft ? todayMin : undefined}
                 value={form.registrationStart}
                 onChange={(e) => updateField('registrationStart', e.target.value)}
                 required
-                className={inputClass}
+                disabled={isOpen}
+                className={isOpen ? inputClassLocked : inputClass}
               />
             </Field>
 
-            <Field label="Registration Closes" required>
+            <Field label="Registration Closes" required extendOnly={isOpen}>
               <input
                 type="datetime-local"
-                min={form.registrationStart || todayMin}
+                min={registrationEndMin}
                 value={form.registrationEnd}
                 onChange={(e) => updateField('registrationEnd', e.target.value)}
                 required
@@ -302,38 +344,37 @@ export default function TournamentEditTab({
           </div>
         </section>
 
-        {/* Tournament Schedule */}
         <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xs">
           <h2 className="text-lg font-semibold text-gray-900">
             Tournament Match Schedule
           </h2>
 
           <div className="mt-6 grid gap-5 md:grid-cols-2">
-            <Field label="Tournament Starts" required>
+            <Field label="Tournament Starts" required locked={isOpen} lockNote={isOpen ? 'Locked once open' : undefined}>
               <input
                 type="datetime-local"
-                min={form.registrationEnd || todayMin}
+                min={isDraft ? form.registrationEnd || todayMin : undefined}
                 value={form.startDate}
                 onChange={(e) => updateField('startDate', e.target.value)}
                 required
-                className={inputClass}
+                disabled={isOpen}
+                className={isOpen ? inputClassLocked : inputClass}
               />
             </Field>
 
-            <Field label="Tournament Ends" required>
+            <Field label="Tournament Ends" required locked={isOpen} lockNote={isOpen ? 'Locked once open' : undefined}>
               <input
                 type="datetime-local"
-                min={form.startDate || todayMin}
+                min={isDraft ? form.startDate || todayMin : undefined}
                 value={form.endDate}
                 onChange={(e) => updateField('endDate', e.target.value)}
                 required
-                className={inputClass}
+                disabled={isOpen}
+                className={isOpen ? inputClassLocked : inputClass}
               />
             </Field>
           </div>
         </section>
-
-        {/* Form Actions */}
         <div className="flex justify-end gap-3 pb-8">
           {onBackToOverview && (
             <button
@@ -361,22 +402,44 @@ export default function TournamentEditTab({
 function Field({
   label,
   required = false,
+  locked = false,
+  lockNote,
+  extendOnly = false,
   children,
 }: {
   label: string;
   required?: boolean;
+  locked?: boolean;
+  lockNote?: string;
+  extendOnly?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-semibold text-gray-700">
+      <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-gray-700">
         {label}
-        {required && <span className="ml-1 text-red-500">*</span>}
+        {required && <span className="text-red-500">*</span>}
+        {locked && (
+          <span className="inline-flex items-center gap-0.5 rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-gray-500">
+            🔒 Locked
+          </span>
+        )}
+        {extendOnly && !locked && (
+          <span className="inline-flex items-center gap-0.5 rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600">
+            ↑ Extend only
+          </span>
+        )}
       </label>
       {children}
+      {lockNote && (
+        <p className="mt-1 text-[11px] text-gray-400">{lockNote}</p>
+      )}
     </div>
   );
 }
 
 const inputClass =
   'w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900';
+
+const inputClassLocked =
+  'w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-400 outline-none cursor-not-allowed select-none';

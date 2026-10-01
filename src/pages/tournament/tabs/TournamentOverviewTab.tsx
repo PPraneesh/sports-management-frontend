@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { TournamentResponse } from '../../../types/tournament.types';
 import { formatDateTime } from '../../../utils/date';
+import { LuCheck, LuClipboard } from 'react-icons/lu';
 
 interface TournamentOverviewTabProps {
   tournament: TournamentResponse;
@@ -13,23 +14,17 @@ export default function TournamentOverviewTab({
 }: TournamentOverviewTabProps) {
   const [copied, setCopied] = useState(false);
 
-  const publicUrl = `${window.location.origin}/public/tournaments/${tournament.publicSlug}`;
+  const publicUrl = `http://localhost:5173/public/tournaments/${tournament.publicSlug}`;
 
   const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(publicUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // fallback — select and copy
-    }
+    await navigator.clipboard.writeText(publicUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div className="grid gap-5 lg:grid-cols-3">
-      {/* Details */}
       <section className="space-y-5 rounded-xl border border-gray-200 bg-white p-6 lg:col-span-2">
-        {/* Name row with copy link */}
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
@@ -47,17 +42,12 @@ export default function TournamentOverviewTab({
             >
               {copied ? (
                 <>
-                  <svg className="h-3.5 w-3.5 text-emerald-600" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
+                  <LuCheck className="h-3.5 w-3.5 text-emerald-600" />
                   <span className="text-emerald-600">Copied</span>
                 </>
               ) : (
                 <>
-                  <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
-                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
-                  </svg>
+                  <LuClipboard className="h-3.5 w-3.5" />
                   Copy public link
                 </>
               )}
@@ -83,13 +73,10 @@ export default function TournamentOverviewTab({
           <InfoItem label="Loss" value={`${tournament.lossPoints} pts`} />
         </div>
       </section>
-
-      {/* Schedule */}
       <section className="rounded-xl border border-gray-200 bg-white p-6">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
           Schedule
         </h2>
-
         <div className="mt-4 space-y-4">
           <ScheduleItem
             label="Registration opens"

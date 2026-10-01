@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import Sidebar from './Sidebar';
 import { useAppSelector } from '../../app/hooks';
+import { LuMenu } from 'react-icons/lu';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -9,29 +10,25 @@ export default function Navbar() {
 
   const initials = user?.name
     ? user.name
-        .split(' ')
-        .slice(0, 2)
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
+      .split(' ')
+      .slice(0, 2)
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
     : null;
 
   return (
     <>
       <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-gray-200 bg-white px-4 md:px-6">
-        {/* Left: mobile menu trigger */}
         <button
           type="button"
           onClick={() => setMobileOpen(true)}
           className="flex items-center gap-2 text-sm font-medium text-gray-600 md:hidden"
           aria-label="Open menu"
         >
-          <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M3 5h14a1 1 0 000-2H3a1 1 0 000 2zm0 6h14a1 1 0 000-2H3a1 1 0 000 2zm0 6h14a1 1 0 000-2H3a1 1 0 000 2z" clipRule="evenodd"/>
-          </svg>
+          <LuMenu className="h-5 w-5" />
         </button>
 
-        {/* Right: auth section */}
         {isAuthenticated && user ? (
           <div className="ml-auto flex items-center gap-2.5">
             <div className="hidden text-right sm:block">

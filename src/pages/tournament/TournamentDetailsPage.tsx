@@ -76,7 +76,6 @@ function ConfirmDialog({
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function TournamentDetailsPage() {
   const { tournamentId } = useParams();
@@ -89,7 +88,6 @@ export default function TournamentDetailsPage() {
   const [error, setError] = useState('');
   const [teamsCount, setTeamsCount] = useState<number | undefined>(undefined);
 
-  // Dialog state
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showCloseRegDialog, setShowCloseRegDialog] = useState(false);
 
@@ -162,7 +160,6 @@ export default function TournamentDetailsPage() {
 
   return (
     <>
-      {/* Dialogs */}
       {showCancelDialog && (
         <ConfirmDialog
           title="Cancel tournament?"
@@ -189,7 +186,6 @@ export default function TournamentDetailsPage() {
       <div className="space-y-5">
         {error && <ErrorAlert message={error} onClose={() => setError('')} />}
 
-        {/* Header */}
         <div className="flex flex-col justify-between gap-4 border-b border-gray-200 pb-5 lg:flex-row lg:items-end">
           <div>
             <div className="flex flex-wrap items-center gap-3">
@@ -203,7 +199,6 @@ export default function TournamentDetailsPage() {
             </p>
           </div>
 
-          {/* Organizer Actions */}
           {isOrganizer && (
             <div className="flex flex-wrap items-center gap-2">
               {tournament.status === TournamentStatus.DRAFT && (
@@ -243,7 +238,6 @@ export default function TournamentDetailsPage() {
           )}
         </div>
 
-        {/* Tabs */}
         <div className="flex justify-center">
           <div className="grid w-full grid-flow-col auto-cols-fr gap-1 rounded-xl bg-gray-100 p-1">
             {tabs.map((tab) => {
@@ -253,11 +247,10 @@ export default function TournamentDetailsPage() {
                   key={tab.id}
                   type="button"
                   onClick={() => handleTabChange(tab.id)}
-                  className={`flex items-center justify-center gap-1.5 rounded-lg py-2 px-3 text-xs font-semibold transition-all ${
-                    isActive
+                  className={`flex items-center justify-center gap-1.5 rounded-lg py-2 px-3 text-xs font-semibold transition-all ${isActive
                       ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-500 hover:text-gray-700'
-                  }`}
+                    }`}
                 >
                   <span>{tab.label}</span>
                   {tab.badge !== undefined && tab.badge > 0 && (
@@ -271,7 +264,6 @@ export default function TournamentDetailsPage() {
           </div>
         </div>
 
-        {/* Tab Content */}
         <div>
           {activeTab === 'overview' && (
             <TournamentOverviewTab

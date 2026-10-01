@@ -142,10 +142,8 @@ export default function TournamentTeamsTab({
         </div>
       )}
 
-      {/* Team Registration Forms — only when registration is OPEN */}
       {tournament.status === TournamentStatus.OPEN ? (
         <section className="">
-          {/* Create Team Manually (Organizer Only) */}
           {isOrganizer ? (
             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xs">
               <div className="flex items-center justify-between">
@@ -230,11 +228,9 @@ export default function TournamentTeamsTab({
           )}
         </section>
       ) : (
-        /* Registration is NOT open — show a status notice */
         <RegistrationClosedNotice status={tournament.status} isOrganizer={isOrganizer} />
       )}
 
-      {/* Registered Teams List */}
       <section className="space-y-4">
         <div className="flex items-center justify-between border-b border-gray-200 pb-4">
           <div>

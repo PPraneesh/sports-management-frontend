@@ -4,11 +4,18 @@ import { getTournamentMatches } from '../../../api/match.api';
 import { getTournamentTeams } from '../../../api/team.api';
 import type { MatchResponse } from '../../../types/match.types';
 import type { TeamResponse } from '../../../types/team.types';
+import { MatchType } from '../../../types/enums';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
 import ErrorAlert from '../../../components/common/ErrorAlert';
 import StatusBadge from '../../../components/common/StatusBadge';
 import { getApiErrorMessage } from '../../../utils/apiError';
 import { formatDateTime } from '../../../utils/date';
+
+const matchTypeOrder: Record<string, number> = {
+  [MatchType.GROUP_STAGE]: 0,
+  [MatchType.SEMIFINAL]: 1,
+  [MatchType.FINAL]: 2,
+};
 
 interface TournamentMatchesTabProps {
   tournamentId: number;
@@ -69,7 +76,6 @@ export default function TournamentMatchesTab({
     <div className="space-y-5">
       {error && <ErrorAlert message={error} />}
 
-      {/* Toolbar */}
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm text-gray-500">
           {matches.length} {matches.length === 1 ? 'fixture' : 'fixtures'}
@@ -102,12 +108,14 @@ export default function TournamentMatchesTab({
       ) : (
         <div className="space-y-3">
           {filteredMatches
-            .sort(
-              (a, b) =>
-                a.roundNumber - b.roundNumber || a.matchNumber - b.matchNumber
+            .slice()
+            .sort((a, b) =>
+              (matchTypeOrder[a.matchType] ?? 99) - (matchTypeOrder[b.matchType] ?? 99) ||
+              a.roundNumber - b.roundNumber ||
+              a.matchNumber - b.matchNumber
             )
             .map((match) => (
-              <MatchCard key={match.id} match={match} teamMap={teamMap} />
+              <MatchCard key={match.id} match={match} teamMap={teamMap} tournamentId={tournamentId} />
             ))}
         </div>
       )}
@@ -118,9 +126,10 @@ export default function TournamentMatchesTab({
 interface MatchCardProps {
   match: MatchResponse;
   teamMap: Map<number, TeamResponse>;
+  tournamentId: number;
 }
 
-function MatchCard({ match, teamMap }: MatchCardProps) {
+function MatchCard({ match, teamMap, tournamentId }: MatchCardProps) {
   const navigate = useNavigate();
 
   const teamAInfo = match.teamAId ? teamMap.get(match.teamAId) : null;
@@ -133,20 +142,18 @@ function MatchCard({ match, teamMap }: MatchCardProps) {
   const teamsAssigned = !!match.teamAId && !!match.teamBId;
 
   const handleManageClick = () => {
-    if (!teamsAssigned) return; // button is disabled
-    navigate(`/matches/${match.id}/manage`);
+    if (!teamsAssigned) return;
+    navigate(`/tournaments/${tournamentId}/matches/${match.id}/manage`);
   };
 
   return (
     <div
-      className={`rounded-xl border bg-white p-5 transition ${
-        isLive
-          ? 'border-green-200 ring-1 ring-green-100'
-          : 'border-gray-200 hover:border-gray-300'
-      }`}
+      className={`rounded-xl border bg-white p-5 transition ${isLive
+        ? 'border-green-200 ring-1 ring-green-100'
+        : 'border-gray-200 hover:border-gray-300'
+        }`}
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        {/* Match info */}
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 text-xs text-gray-400">
             <span className="font-medium uppercase tracking-wider text-gray-500">
@@ -166,7 +173,7 @@ function MatchCard({ match, teamMap }: MatchCardProps) {
             <div className="text-right">
               <p className="truncate text-sm font-semibold text-gray-900">{teamA}</p>
               <p className="mt-0.5 text-2xl font-black tabular-nums text-gray-900">
-                {match.teamAScore ?? '–'}
+                {match.teamAScore ?? '-'}
               </p>
             </div>
             <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-bold text-gray-400">
@@ -175,7 +182,7 @@ function MatchCard({ match, teamMap }: MatchCardProps) {
             <div>
               <p className="truncate text-sm font-semibold text-gray-900">{teamB}</p>
               <p className="mt-0.5 text-2xl font-black tabular-nums text-gray-900">
-                {match.teamBScore ?? '–'}
+                {match.teamBScore ?? '-'}
               </p>
             </div>
           </div>
@@ -183,24 +190,21 @@ function MatchCard({ match, teamMap }: MatchCardProps) {
           <p className="mt-2 text-xs text-gray-400">{formatDateTime(match.scheduledAt)}</p>
         </div>
 
-        {/* Actions */}
         <div className="flex shrink-0 gap-2">
-          {/* View button — always shown */}
           <Link
-            to={`/matches/${match.id}`}
+            to={`/tournaments/${tournamentId}/matches/${match.id}`}
             className="rounded-lg border border-gray-200 px-3.5 py-2 text-xs font-semibold text-gray-600 transition hover:bg-gray-50"
           >
             View
           </Link>
 
-          {/* Manage — shown only when not completed; disabled + tooltip when teams unassigned */}
           {!isCompleted && (
             <button
               type="button"
               onClick={handleManageClick}
               disabled={!teamsAssigned}
               title={!teamsAssigned ? 'Teams must be assigned before managing this match' : undefined}
-              className="rounded-lg bg-gray-900 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
+              className="cursor-pointer rounded-lg bg-gray-900 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Manage
             </button>

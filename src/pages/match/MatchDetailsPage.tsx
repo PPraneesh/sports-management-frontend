@@ -22,33 +22,24 @@ export default function MatchDetailsPage() {
   useEffect(() => {
     if (!matchId || Number.isNaN(numMatchId)) return;
 
-    let ignore = false;
-    const load = async () => {
-      try {
-        setLoading(true);
-        setError('');
-        const matchData = await getMatchById(numMatchId);
-        if (ignore) return;
+    setLoading(true);
+    setError('');
+
+    getMatchById(numMatchId)
+      .then((matchData) => {
         setMatch(matchData);
 
-        // Load team names using the match's tournamentId
         if (matchData.tournamentId) {
-          try {
-            const teamsData = await getTournamentTeams(matchData.tournamentId);
-            if (!ignore) setTeams(teamsData);
-          } catch {
-            // team names unavailable — degrade gracefully
-          }
+          getTournamentTeams(matchData.tournamentId)
+            .then((teamsData) => setTeams(teamsData))
         }
-      } catch (err) {
-        if (!ignore) setError(getApiErrorMessage(err, 'Failed to load match details.'));
-      } finally {
-        if (!ignore) setLoading(false);
-      }
-    };
-
-    load();
-    return () => { ignore = true; };
+      })
+      .catch((err) => {
+        setError(getApiErrorMessage(err, 'Failed to load match details.'));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [matchId, numMatchId]);
 
   if (loading) return <LoadingSpinner message="Loading match…" />;

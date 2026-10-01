@@ -4,6 +4,7 @@ import StatusBadge from '../common/StatusBadge';
 import { formatDate } from '../../utils/date';
 import { useAppSelector } from '../../app/hooks';
 import { TournamentStatus } from '../../types/enums';
+import { LuMapPin } from 'react-icons/lu';
 
 interface TournamentCardProps {
   tournament: TournamentResponse;
@@ -57,10 +58,7 @@ export default function TournamentCard({
         <div className="mt-5 space-y-2 border-t border-gray-100 pt-4 text-xs text-gray-600">
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-gray-500">
-              <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-              </svg>
+              <LuMapPin className="h-4 w-4 shrink-0" />
               <span className="truncate max-w-[150px]">{tournament.location || 'Location TBD'}</span>
             </span>
 

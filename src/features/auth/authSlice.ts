@@ -65,7 +65,7 @@ export const login = createAsyncThunk<
       const err = error as { response?: { data?: { message?: string } } };
       return rejectWithValue(
         err.response?.data?.message ??
-          'Login failed. Please try again.'
+        'Login failed. Please try again.'
       );
     }
   }

@@ -447,11 +447,10 @@ function MemberRow({ member, showRemove, onRemove }: MemberRowProps) {
 
         {/* Avatar */}
         <div
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
-            isCapt
-              ? 'bg-amber-100 text-amber-700'
-              : 'bg-indigo-100 text-indigo-700'
-          }`}
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold ${isCapt
+            ? 'bg-amber-100 text-amber-700'
+            : 'bg-indigo-100 text-indigo-700'
+            }`}
         >
           {initials}
         </div>

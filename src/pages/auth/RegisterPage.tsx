@@ -50,7 +50,6 @@ export default function RegisterPage() {
         password,
       });
 
-      // Automatically sign in upon successful registration
       try {
         await dispatch(
           login({
@@ -60,7 +59,6 @@ export default function RegisterPage() {
         ).unwrap();
         navigate('/dashboard', { replace: true });
       } catch {
-        // If auto-login fails, redirect to login page with message
         navigate('/login', { replace: true });
       }
     } catch (err) {

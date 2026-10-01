@@ -29,6 +29,17 @@ export interface AddTeamMemberRequest {
   email: string;
 }
 
+export interface TournamentSummary {
+  id: number;
+  organizerId: number;
+  name: string;
+  visibility: 'PUBLIC' | 'PRIVATE';
+  status: string;
+  maximumTeams: number;
+  registrationStart: string;
+  registrationEnd: string;
+}
+
 export interface MyTeamSummary {
   teamId: number;
   tournamentId: number;
@@ -37,6 +48,7 @@ export interface MyTeamSummary {
   logoUrl: string | null;
   teamStatus: 'ACTIVE' | 'WITHDRAWN';
   memberRole: 'CAPTAIN' | 'PLAYER';
+  tournament: TournamentSummary;
 }
 
 export interface TeamResponse {

@@ -110,7 +110,6 @@ export default function CreateTournamentPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      {/* Page Header */}
       <div className="flex items-center justify-between border-b border-gray-200 pb-5">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
@@ -131,7 +130,6 @@ export default function CreateTournamentPage() {
       {error && <ErrorAlert message={error} onClose={() => setError('')} />}
 
       <form onSubmit={handleSubmit} className="space-y-8 divide-y divide-gray-200">
-        {/* Basic Information */}
         <div className="space-y-4">
           <h2 className="text-base font-semibold text-gray-900">Basic Information</h2>
 
@@ -201,7 +199,6 @@ export default function CreateTournamentPage() {
           </div>
         </div>
 
-        {/* Configuration & Format */}
         <div className="space-y-4 pt-8">
           <h2 className="text-base font-semibold text-gray-900">Format & Points</h2>
 
@@ -271,7 +268,6 @@ export default function CreateTournamentPage() {
           </div>
         </div>
 
-        {/* Schedule & Deadlines */}
         <div className="space-y-4 pt-8">
           <h2 className="text-base font-semibold text-gray-900">Dates & Schedule</h2>
 
@@ -342,7 +338,6 @@ export default function CreateTournamentPage() {
           </div>
         </div>
 
-        {/* Submit Actions */}
         <div className="flex items-center justify-end gap-3 pt-6">
           <Link
             to="/tournaments"

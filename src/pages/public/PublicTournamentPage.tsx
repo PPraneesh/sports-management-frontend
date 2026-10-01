@@ -24,6 +24,18 @@ import PublicGroupCard from './PublicGroupCard';
 import StatusBadge from '../../components/common/StatusBadge';
 import { getApiErrorMessage } from '../../utils/apiError';
 import { formatDate, formatDateTime } from '../../utils/date';
+import {
+  LuX,
+  LuChevronDown,
+  LuMapPin,
+  LuCalendar,
+  LuUsers,
+  LuClipboard,
+  LuCheck,
+  LuZap,
+  LuClock,
+  LuTrophy,
+} from 'react-icons/lu';
 
 // ---------------------------------------------------------------------------
 // Match Detail Modal (Powered by API 5: /api/public/tournaments/{slug}/matches/{matchCode})
@@ -97,9 +109,7 @@ function MatchDetailModal({
             className="rounded-full p-1.5 text-gray-400 hover:bg-gray-200/60 hover:text-gray-700 transition"
             aria-label="Close match details"
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <LuX className="h-5 w-5" />
           </button>
         </div>
 
@@ -475,17 +485,11 @@ function RegisteredTeamCard({
             className="flex items-center gap-1.5 font-bold text-indigo-600 hover:text-indigo-800 transition py-1 px-2 rounded-lg hover:bg-indigo-50"
           >
             <span>{isExpanded ? 'Hide Roster' : 'View Roster'}</span>
-            <svg
+            <LuChevronDown
               className={`h-3.5 w-3.5 transition-transform duration-200 ${
                 isExpanded ? 'rotate-180' : ''
               }`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.5}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
+            />
           </button>
         </div>
       </div>
@@ -608,17 +612,11 @@ function TournamentSelector({
         <span className="max-w-[180px] sm:max-w-[260px] truncate">
           {current?.name || 'Switch Tournament'}
         </span>
-        <svg
+        <LuChevronDown
           className={`h-4 w-4 text-white/70 transition-transform ${
             isOpen ? 'rotate-180' : ''
           }`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
+        />
       </button>
 
       {isOpen && (
@@ -1062,18 +1060,13 @@ export default function PublicTournamentPage() {
               {/* Location & Dates row */}
               <div className="flex flex-wrap items-center gap-y-2 gap-x-6 pt-2 text-xs text-gray-300">
                 <div className="flex items-center gap-1.5">
-                  <svg className="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+                  <LuMapPin className="h-4 w-4 text-indigo-400" />
                   <span className="font-semibold text-white">{location}</span>
                 </div>
 
                 {details?.startDate && details?.endDate && (
                   <div className="flex items-center gap-1.5">
-                    <svg className="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                    <LuCalendar className="h-4 w-4 text-indigo-400" />
                     <span>
                       {formatDate(details.startDate)} – {formatDate(details.endDate)}
                     </span>
@@ -1148,9 +1141,7 @@ export default function PublicTournamentPage() {
             value={totalTeamsCount}
             sublabel="Registered squads"
             icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
+              <LuUsers className="h-5 w-5" />
             }
           />
 
@@ -1159,9 +1150,7 @@ export default function PublicTournamentPage() {
             value={totalMatchesCount}
             sublabel="Across all stages"
             icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
+              <LuClipboard className="h-5 w-5" />
             }
           />
 
@@ -1170,9 +1159,7 @@ export default function PublicTournamentPage() {
             value={completedMatchesCount}
             sublabel="Matches finished"
             icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
-              </svg>
+              <LuCheck className="h-5 w-5" />
             }
           />
 
@@ -1183,9 +1170,7 @@ export default function PublicTournamentPage() {
             isLive={liveMatchesCount > 0}
             variant={liveMatchesCount > 0 ? 'live' : 'default'}
             icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+              <LuZap className="h-5 w-5" />
             }
           />
 
@@ -1194,9 +1179,7 @@ export default function PublicTournamentPage() {
             value={upcomingMatchesCount}
             sublabel="Scheduled fixtures"
             icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <LuClock className="h-5 w-5" />
             }
           />
 
@@ -1206,9 +1189,7 @@ export default function PublicTournamentPage() {
             sublabel={championName ? `Winner: ${championName}` : 'In progress'}
             variant={championName ? 'champion' : 'default'}
             icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-              </svg>
+              <LuTrophy className="h-5 w-5" />
             }
           />
         </div>

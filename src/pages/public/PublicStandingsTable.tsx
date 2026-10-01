@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { StandingResponse } from '../../types/standing.types';
 import type { TeamResponse } from '../../types/team.types';
+import { LuTable } from 'react-icons/lu';
 
 interface PublicStandingsTableProps {
   standings: StandingResponse[];
@@ -26,9 +27,7 @@ export default function PublicStandingsTable({
     return (
       <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-8 text-center">
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-100 text-gray-400">
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
+          <LuTable className="h-6 w-6" />
         </div>
         <p className="mt-2 text-sm font-semibold text-gray-700">No standings available yet</p>
         <p className="text-xs text-gray-400 mt-0.5">Standings will update dynamically once matches are completed.</p>
